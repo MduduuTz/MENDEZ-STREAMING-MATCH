@@ -1,10 +1,18 @@
 // server.js
 import express from "express";
-import fetch from "node-fetch"; // make sure node-fetch@2 is installed
+import fetch from "node-fetch";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(cors()); // allow all origins
+app.use(cors());
+
+// Serve static files (index.html, css, js, etc.)
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/proxy", async (req, res) => {
   const target = req.query.url;
@@ -18,10 +26,8 @@ app.get("/proxy", async (req, res) => {
       }
     });
 
-    // Forward status
     res.status(upstream.status);
 
-    // Forward critical headers
     const passthru = [
       "content-type",
       "content-length",
@@ -33,11 +39,9 @@ app.get("/proxy", async (req, res) => {
       if (val) res.setHeader(h, val);
     });
 
-    // Add CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Expose-Headers", "Content-Length, Content-Range");
 
-    // Stream response
     upstream.body.pipe(res);
   } catch (err) {
     console.error("Proxy error:", err);
@@ -46,4 +50,4 @@ app.get("/proxy", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Proxy server running on ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
