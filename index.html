@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⚽ DUDUU_MENDEZ FOOTBALL STREAMING ⚽</title>
+  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+  <style>
+    body { background: #111; color: #fff; text-align: center; }
+    #player { width: 100%; max-width: 700px; height: 400px; margin: 20px auto; }
+    button { background: red; color: white; border: none; padding: 10px 20px; margin: 10px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>⚽ DUDUU_MENDEZ FOOTBALL STREAMING 2025 ⚽</h1>
+  <div id="player"></div>
+  <button onclick="refreshStream()">🔄 Refresh Stream</button>
+
+  <script>
+    const rawVideos = [
+      "http://205.237.104.148/hls/dddaqqq.m3u8",
+      "https://a.erjtukuy.shop/hls/dddaqqq.m3u8",
+      "https://a.tykiliu.shop/hls/dddaqqq.m3u8"
+    ];
+    let current = 0;
+
+    function loadPlayer(url) {
+      if (window.player) player.destroy();
+      window.player = new Clappr.Player({
+        source: `/proxy?url=${encodeURIComponent(url)}`,
+        parentId: "#player",
+        autoPlay: true,
+        mute: false,
+      });
+    }
+
+    function refreshStream() {
+      current = (current + 1) % rawVideos.length;
+      loadPlayer(rawVideos[current]);
+    }
+
+    // Load first stream
+    loadPlayer(rawVideos[current]);
+  </script>
+</body>
+</html>
